@@ -15,6 +15,17 @@ tells-results/
 
 Environments: `predator_prey`, `drones`, `football`, `fire`, `market_game`, `market_game_large`, `predator_prey_swarm`.
 
+## Downloading Datasets
+
+The evaluation rollouts for the main seed (`results/<env>/results_{fully_obs,allocentric,pf}/`) are available on [Zenodo](https://zenodo.org/records/24114589). After cloning this repository, run the following from its root to download them and add them to the existing `results/` folder. Existing files are never overwritten, so everything from the repository is kept. This needs about 57 GB of free disk space (a 4.7 GB download that unpacks to 52 GB).
+
+```bash
+curl -L -o results.zip "https://zenodo.org/records/24114589/files/results.zip?download=1"
+echo "42ef356490efde6014e72d980016b05d  results.zip" | md5sum -c -
+unzip -n results.zip -x "__MACOSX/*" "*.DS_Store"
+rm results.zip
+```
+
 ## Installation
 
 Clone the code into this folder, then install from inside it:
@@ -148,6 +159,46 @@ Train only a new belief model for an existing policy:
 ```bash
 STEPS="data belief" MODEL_DIR=../models/marl/football_fully_obs/checkpoint3000 scripts/train_football.sh
 ```
+
+## Reproducibility Over Seeds
+
+We trained two additional seeds for every experiment to show that the results are reproducible across random seeds. To run your own analysis on these results, follow the instructions in [Generating Evaluation Rollouts](#generating-evaluation-rollouts) to collect data from the models provided in `models/marl/<run>/additional_seeds/` and `models/belief/_<run>_NN_1/additional_seeds/`.
+
+| Experiment | Metric | Main | Seed 1 | Seed 2 |
+|---|---|---|---|---|
+| `predator_prey` | Seed | 23 | 53548 | 48405 |
+| | Average belief error | 0.990 | 0.923 | 0.955 |
+| | Belief std | 0.371 | 0.342 | 0.356 |
+| | CCA weighted R² | 0.930 | 0.943 | 0.936 |
+| | Allocentric success | 92.0% | 92.4% | 94.8% |
+| `drones` | Seed | 22 | 53548 | 31907 |
+| | Average belief error | 0.609 | 0.635 | 0.630 |
+| | Belief std | 0.195 | 0.197 | 0.204 |
+| | CCA weighted R² | 0.937 | 0.948 | 0.952 |
+| | Allocentric success | 74.7% | 66.1% | 63.9% |
+| `football` | Seed | 22 | 53548 | 48405 |
+| | Average belief error | 0.088 | 0.078 | 0.081 |
+| | Belief std | 0.050 | 0.046 | 0.044 |
+| | CCA weighted R² | 0.724 | 0.800 | 0.747 |
+| | Allocentric success | 36.8% | 28.0% | 26.0% |
+| `fire` | Seed | 22 | 23 | 25 |
+| | Average belief error | 6.629 | 5.100 | 6.816 |
+| | Belief std | 2.955 | 2.698 | 4.123 |
+| | CCA weighted R² | 0.880 | 0.945 | 0.884 |
+| | Allocentric success | 71.0% | 58.0% | 73.0% |
+| `market_game` | Seed | 23 | 53548 | 48405 |
+| | Average belief error | 3.490 | 3.553 | 3.289 |
+| | Belief std | 1.878 | 1.633 | 1.269 |
+| | CCA weighted R² | 0.870 | 0.877 | 0.880 |
+| | Allocentric success | 97.5% | 95.5% | 98.2% |
+| `market_game_large` | Seed | 23 | 53548 | 48405 |
+| | Average belief error | 1.72 | 2.64 | 2.12 |
+| | Belief std | 0.654 | 1.032 | 0.795 |
+| | Allocentric success | 91.9% | 88.5% | 80.4% |
+| `predator_prey_swarm` | Seed | 23 | 53548 | 48405 |
+| | Average belief error | 0.685 | 0.768 | 0.722 |
+| | Belief std | 0.219 | 0.225 | 0.215 |
+| | Allocentric success | 97.3% | 91.7% | 94.8% |
 
 ## Generating Results and Plots
 
